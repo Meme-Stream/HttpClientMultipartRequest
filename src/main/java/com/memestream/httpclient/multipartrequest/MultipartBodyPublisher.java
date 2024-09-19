@@ -1,6 +1,9 @@
 package com.memestream.httpclient.multipartrequest;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -59,7 +62,6 @@ public class MultipartBodyPublisher {
         }
 
         public Builder addFile(String name, String type, Path path) {
-            System.out.println();
             records.add(
                     MultipartRecord
                             .builder()
@@ -98,14 +100,16 @@ public class MultipartBodyPublisher {
                 out.write(stringBuilder.toString().getBytes(StandardCharsets.UTF_8));
 
                 final var content = record.getContent();
-                switch (content) {
-                    case String s -> out.write(s.getBytes(StandardCharsets.UTF_8));
-                    case Path p -> out.write(Files.readAllBytes(p));
-                    case byte[] b -> out.write(b);
-                    case null, default -> {
-                        final var objectOut = new ObjectOutputStream(out);
-                        objectOut.writeObject(objectOut);
-                        objectOut.flush();
+                if (content != null) {
+                    switch (content) {
+                        case String s -> out.write(s.getBytes(StandardCharsets.UTF_8));
+                        case Path p -> out.write(Files.readAllBytes(p));
+                        case byte[] b -> out.write(b);
+                        default -> {
+                            final var objectOut = new ObjectOutputStream(out);
+                            objectOut.writeObject(objectOut);
+                            objectOut.flush();
+                        }
                     }
                 }
                 out.write(lineSeparator.getBytes(StandardCharsets.UTF_8));

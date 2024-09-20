@@ -3,7 +3,6 @@ package com.memestream.httpclient.multipartrequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,7 +17,6 @@ import java.util.UUID;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
-@Setter
 public class MultipartBodyPublisher {
 
     private String boundary;
@@ -114,7 +112,8 @@ public class MultipartBodyPublisher {
                 }
                 out.write(lineSeparator.getBytes(StandardCharsets.UTF_8));
             }
-            out.write(("--" + boundary).getBytes(StandardCharsets.UTF_8));
+            if (!records.isEmpty())
+                out.write(("--" + boundary).getBytes(StandardCharsets.UTF_8));
 
             return new MultipartBodyPublisher(boundary, out.toByteArray(), "multipart/form-data; boundary=\"" + boundary + "\"");
         }

@@ -3,7 +3,6 @@ package com.memestream.httpclient.multipartrequest;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
